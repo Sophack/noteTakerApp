@@ -1,7 +1,8 @@
-//dependendies, the only non built in is the express.js
+//dependendies
 const express = require("express"); 
 const path = require("path"); 
 const fs = require("fs"); 
+const dbData = "./Develop/db/db.json"
 
 //pathfile system
 const util = require("util"); 
@@ -12,43 +13,45 @@ const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
 //set up server to communicate with heroku as well 
-const app = expres() ;
+const app = express() ;
 const PORT = process.env.PORT || 8000; 
 
+//make sure json will be coded as intended 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //static middleware for css & other public files 
-app.use(express.static("../develop/public")); 
+app.use(express.static((path.join(__dirname, "Develop/public")))); 
 
 
 //GET routes API routes reading db.json file & converting into array & into readable format
 app.get("/api/notes", function(req, res){
-    readFileAsync("./develop/db/db.json", "utf8").then(function(data){
+    readFileAsync(dbData, "utf8").then(function(data){
         notes = [].concat(JSON.parse(data))
         res.json(notes);
     })
 }); 
 
 //POST request, reading & pushing into array 
-app.post("/api/notes", function(req, res){
-    const note = req.body;
-    readFileAsync(".develop/db/db.json", "utf8").then(function(data){
-        notes = [].concat(JSON.parse(data))
-        const notes = [].concat(JSON.parse(data));
-        note.id = notes.length + 1
-        //add to array notes & generating new notes 
-        notes.push(note);
-        return notes
-      }).then(function(notes) {
-        writeFileAsync("./develop/db/db.json", JSON.stringify(notes))
-        res.json(note);
-      })
+app.post('/api/notes', function (req, res) {
+  const dbPost = JSON.parse(fs.readFileSync(dbData).toString());
+      const noteData = req.body;
+      noteData.id = Date.now();
+      dbPost.push(noteData);
+  
+      fs.writeFile(dbData, JSON.stringify(dbPost), function (err) {
+          if (err) {
+              throw err;
+          };
+      });
+  
+      res.json(noteData);
   });
-
-//DELETE request to target which note to delete 
+  
+  //DELETE request to target which note to delete 
 app.delete("/api/notes/:id", function(req, res) {
     const idToDelete = parseInt(req.params.id);
+    //read JSON file & turn into array 
     readFileAsync("./develop/db/db.json", "utf8").then(function(data) {
       const notes = [].concat(JSON.parse(data));
       const newNotesData = []
@@ -71,15 +74,13 @@ app.delete("/api/notes/:id", function(req, res) {
 
   // HTML Routes
 app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "./develop/public/notes.html"));
+    res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
     });
   
-  app.get("/", function(req, res) {
-       res.sendFile(path.join(__dirname, "./develop/public/index.html"));
-    });
-  
+    //only need this to catch all & no need to specify 
+
     app.get("*", function(req, res) {
-      res.sendFile(path.join(__dirname, "./develop/public/index.html"));
+      res.sendFile(path.join(__dirname, "Develop/public/index.html"));
    });
   
   

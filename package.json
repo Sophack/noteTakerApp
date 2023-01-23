@@ -17,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/Sophack/noteTakerApp/issues"
   },
-  "homepage": "https://github.com/Sophack/noteTakerApp#readme"
+  "homepage": "https://github.com/Sophack/noteTakerApp#readme",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
