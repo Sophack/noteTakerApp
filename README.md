@@ -5,11 +5,10 @@ This is note-taking application to create and keep track of important notes. Thi
 
 ## Table of Contents
 - [Description](#description)
-- [User Story](#user-story)
-- [Acceptance Criteria](#acceptance-criteria)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributors](#contributors)
+- [License](#license)
 - [Tests](#tests)
 - [Technology Used](#technology-used)
 - [Questions](#questions)
