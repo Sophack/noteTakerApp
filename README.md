@@ -59,6 +59,10 @@ Please follow standard guidelines at: [Contributor Covenant](https://www.contrib
 - JSON
 - Heroku
 
+## Deployed Application on Heroku
+
+https://note-taker-app-sarafn.herokuapp.com/
+
 ## Questions
 
 My Github username is sophack, which can be accessed [here](https://github.com/Sophack)
